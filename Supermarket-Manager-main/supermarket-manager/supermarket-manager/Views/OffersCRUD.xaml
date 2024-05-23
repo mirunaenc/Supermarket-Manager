@@ -1,0 +1,104 @@
+<Window x:Class="supermarket_manager.Views.OffersCRUD"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ctx="clr-namespace:supermarket_manager.View_Models"
+        xmlns:convert="clr-namespace:supermarket_manager.Converters"
+        mc:Ignorable="d"
+        Title="Offers CRUD" Height="610" Width="800">
+    <Window.Background>
+        <ImageBrush ImageSource="C:\Users\Miruna\Downloads\vecteezy_supermarket-store-and-market-shelves-baskets_21935397_615\vecteezy_supermarket-store-and-market-shelves-baskets_21935397.jpg" Stretch="Fill"/>
+    </Window.Background>
+    <Window.DataContext>
+        <ctx:OffersCRUDVM/>
+    </Window.DataContext>
+    <Window.Resources>
+        <Style x:Key="CustomButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="SkyBlue"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" ShadowDepth="2" BlurRadius="4"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="DarkSlateBlue"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <convert:OfferConvert x:Key="offerConvert"/>
+    </Window.Resources>
+    <Grid>
+        <Border Background="#AAFFFFFF" Padding="20" CornerRadius="10" Margin="20">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <WrapPanel HorizontalAlignment="Center" Margin="0,0,0,10">
+                    <Button Width="100" Margin="0,0,10,0" Command="{Binding AddCommand}" Style="{StaticResource CustomButtonStyle}">
+                        Add
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource offerConvert}">
+                                <Binding ElementName="txtReason" Path="Text"/>
+                                <Binding ElementName="cmbProduct" Path="SelectedValue"/>
+                                <Binding ElementName="txtDiscountPercentage" Path="Text"/>
+                                <Binding ElementName="dpStartDate" Path="SelectedDate"/>
+                                <Binding ElementName="dpEndDate" Path="SelectedDate"/>
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button Content="Modify" Width="100" Margin="0,0,10,0" Command="{Binding ModifyCommand}" Style="{StaticResource CustomButtonStyle}"
+                            CommandParameter="{Binding ElementName=offersGrid, Path=SelectedItem}"/>
+                    <Button Content="Delete" Width="100" Margin="0,0,10,0" Command="{Binding DeleteCommand}" Style="{StaticResource CustomButtonStyle}"
+                            CommandParameter="{Binding ElementName=offersGrid, Path=SelectedItem}"/>
+                </WrapPanel>
+                <WrapPanel Margin="0,0,0,10" HorizontalAlignment="Center">
+                    <Label FontWeight="Bold">Reason:</Label>
+                    <TextBox Name="txtReason" Width="200" Text="{Binding ElementName=offersGrid, Path=SelectedItem.Reason, UpdateSourceTrigger=PropertyChanged}"/>
+                </WrapPanel>
+                <WrapPanel HorizontalAlignment="Center" Margin="0,0,0,10">
+                    <Label FontWeight="Bold">Product:</Label>
+                    <ComboBox Name="cmbProduct" Width="200" Margin="4,0,0,0"
+                              DisplayMemberPath="Name"
+                              SelectedValuePath="Id"
+                              SelectedValue="{Binding ElementName=offersGrid, Path=SelectedItem.ProductId, UpdateSourceTrigger=PropertyChanged}"/>
+                </WrapPanel>
+                <WrapPanel Margin="0,0,0,10" HorizontalAlignment="Center">
+                    <Label FontWeight="Bold">Discount Percentage:</Label>
+                    <TextBox Name="txtDiscountPercentage" Width="200" Text="{Binding ElementName=offersGrid, Path=SelectedItem.DiscountPercentage, UpdateSourceTrigger=PropertyChanged}"/>
+                </WrapPanel>
+                <WrapPanel HorizontalAlignment="Center" Margin="0,0,0,10">
+                    <Label FontWeight="Bold">Start Date:</Label>
+                    <DatePicker Name="dpStartDate" Width="200" SelectedDate="{Binding ElementName=offersGrid, Path=SelectedItem.StartDate, UpdateSourceTrigger=PropertyChanged}"/>
+                </WrapPanel>
+                <WrapPanel HorizontalAlignment="Center" Margin="0,0,0,10">
+                    <Label FontWeight="Bold">End Date:</Label>
+                    <DatePicker Name="dpEndDate" Width="200" Margin="4,0,0,0" SelectedDate="{Binding ElementName=offersGrid, Path=SelectedItem.EndDate, UpdateSourceTrigger=PropertyChanged}"/>
+                </WrapPanel>
+                <DataGrid Name="offersGrid" AutoGenerateColumns="False" Margin="0,15,0,0" Height="250" Width="550"
+                          ItemsSource="{Binding OfferList}" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                        <DataGridTextColumn Header="Reason" Binding="{Binding Reason}" Width="100"/>
+                        <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" Width="100"/>
+                        <DataGridTextColumn Header="Discount Percentage" Binding="{Binding DiscountPercentage}" Width="100"/>
+                        <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate}" Width="100"/>
+                        <DataGridTextColumn Header="End Date" Binding="{Binding EndDate}" Width="100"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

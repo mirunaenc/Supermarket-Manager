@@ -1,0 +1,66 @@
+<Window x:Class="supermarket_manager.Views.ReceiptPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ctx="clr-namespace:supermarket_manager.View_Models"
+        mc:Ignorable="d"
+        Title="Receipt Page">
+    <Window.DataContext>
+        <ctx:CashierWindowVM/>
+    </Window.DataContext>
+    <Window.Resources>
+        <Style x:Key="CustomButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="SkyBlue"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" ShadowDepth="2" BlurRadius="4"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="DarkSlateBlue"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid Background="#AAFFFFFF" Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Content="Receipts" Foreground="LightSalmon" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <DataGrid Grid.Row="1" Name="receiptsGrid" AutoGenerateColumns="False" Margin="0,15,0,0" Height="250" Width="750"
+                  ItemsSource="{Binding Receipts}" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Receipt ID" Binding="{Binding Id}" Width="100"/>
+                <DataGridTextColumn Header="Issue Date" Binding="{Binding IssueDate}" Width="150"/>
+                <DataGridTextColumn Header="Cashier" Binding="{Binding Cashier}" Width="150"/>
+                <DataGridTextColumn Header="Total Amount" Binding="{Binding TotalAmount}" Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <WrapPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <Label FontWeight="Bold" Foreground="Black">Total Amount:</Label>
+            <TextBox Name="txtTotalAmount" Width="200" IsReadOnly="True" Text="{Binding TotalAmount, UpdateSourceTrigger=PropertyChanged}"/>
+        </WrapPanel>
+
+        <Button Grid.Row="2" Width="100" Margin="10" Command="{Binding FinalizeReceiptCommand}" Style="{StaticResource CustomButtonStyle}">Finalize Receipt</Button>
+    </Grid>
+</Window>

@@ -1,0 +1,101 @@
+﻿<Window x:Class="supermarket_manager.Views.StocksCRUD"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ctx="clr-namespace:supermarket_manager.View_Models"
+        mc:Ignorable="d"
+        Title="StocksCRUD" Height="950" Width="1000">
+    <Window.Background>
+        <ImageBrush ImageSource="C:\Users\Miruna\Downloads\vecteezy_supermarket-store-and-market-shelves-baskets_21935397_615\vecteezy_supermarket-store-and-market-shelves-baskets_21935397.jpg" Stretch="Fill"/>
+    </Window.Background>
+    <Window.DataContext>
+        <ctx:StocksCRUDVM/>
+    </Window.DataContext>
+    <Window.Resources>
+        <Style x:Key="CustomButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="SkyBlue"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" ShadowDepth="2" BlurRadius="4"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="DarkSlateBlue"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Grid>
+            <Border Background="#AAFFFFFF" Padding="20" CornerRadius="10" Margin="20">
+                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center">
+                    <WrapPanel HorizontalAlignment="Center" Margin="0,0,0,10">
+                        <Label FontWeight="Bold">Product Name:</Label>
+                        <TextBox Name="txtProductName" Width="200" Text="{Binding NewStock.ProductName, UpdateSourceTrigger=PropertyChanged}"/>
+                    </WrapPanel>
+                    <WrapPanel HorizontalAlignment="Center" Margin="0,0,0,10">
+                        <Label FontWeight="Bold">Quantity:</Label>
+                        <TextBox Name="txtQuantity" Width="200" Text="{Binding NewStock.Quantity, UpdateSourceTrigger=PropertyChanged}"/>
+                    </WrapPanel>
+                    <WrapPanel HorizontalAlignment="Center" Margin="0,0,0,10">
+                        <Label FontWeight="Bold">Unit:</Label>
+                        <TextBox Name="txtUnit" Width="200" Text="{Binding NewStock.Unit, UpdateSourceTrigger=PropertyChanged}"/>
+                    </WrapPanel>
+                    <WrapPanel HorizontalAlignment="Center" Margin="0,0,0,10">
+                        <Label FontWeight="Bold">Supply Date:</Label>
+                        <DatePicker Name="txtSupplyDate" SelectedDate="{Binding NewStock.SupplyDate, UpdateSourceTrigger=PropertyChanged}"/>
+                    </WrapPanel>
+                    <WrapPanel HorizontalAlignment="Center" Margin="0,0,0,10">
+                        <Label FontWeight="Bold">Expiry Date:</Label>
+                        <DatePicker Name="txtExpiryDate" SelectedDate="{Binding NewStock.ExpiryDate, UpdateSourceTrigger=PropertyChanged}"/>
+                    </WrapPanel>
+                    <WrapPanel HorizontalAlignment="Center" Margin="0,0,0,10">
+                        <Label FontWeight="Bold">Purchase Price:</Label>
+                        <TextBox Name="txtPurchasePrice" Width="200" Text="{Binding NewStock.PurchasePrice, UpdateSourceTrigger=PropertyChanged}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="10" HorizontalAlignment="Center">
+                        <Button Width="100" Margin="0,0,10,0" Command="{Binding AddCommand}" CommandParameter="{Binding NewStock}" Style="{StaticResource CustomButtonStyle}">Add Stock</Button>
+                        <Button Width="100" Margin="0,0,10,0" Command="{Binding UpdatePriceCommand}" Style="{StaticResource CustomButtonStyle}">Update Price</Button>
+                    </WrapPanel>
+                 
+                    <DataGrid Name="stocksGrid" AutoGenerateColumns="False" Margin="0,15,0,0" Height="223" Width="734"
+                              ItemsSource="{Binding StockList}" IsReadOnly="True" SelectedItem="{Binding SelectedStock}" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                            <DataGridTextColumn Header="Product Name" Binding="{Binding ProductName}" Width="100"/>
+                            <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="100"/>
+                            <DataGridTextColumn Header="Unit" Binding="{Binding Unit}" Width="100"/>
+                            <DataGridTextColumn Header="Supply Date" Binding="{Binding SupplyDate}" Width="100"/>
+                            <DataGridTextColumn Header="Expiry Date" Binding="{Binding ExpiryDate}" Width="100"/>
+                            <DataGridTextColumn Header="Purchase Price" Binding="{Binding PurchasePrice}" Width="100"/>
+                            <DataGridTextColumn Header="Sale Price" Binding="{Binding SalePrice}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid Name="categoryValuesGrid" AutoGenerateColumns="False" Margin="0,15,0,0" Height="250" Width="420"
+                              ItemsSource="{Binding CategoryValueList}" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="300"/>
+                            <DataGridTextColumn Header="Total Value" Binding="{Binding TotalValue}" Width="150"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</Window>
